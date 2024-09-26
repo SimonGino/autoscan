@@ -21,7 +21,7 @@ type Config struct {
 
 // New creates an autoscan-compatible HTTP Trigger for Sonarr webhooks.
 func New(c Config) (autoscan.HTTPTrigger, error) {
-	rewriter, err :=  autoscan.NewRewriter(c.Rewrite)
+	rewriter, err := autoscan.NewRewriter(c.Rewrite)
 	if err != nil {
 		return nil, err
 	}
