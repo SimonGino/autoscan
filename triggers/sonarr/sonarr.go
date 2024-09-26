@@ -93,7 +93,7 @@ func (h handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		}
 
 		// Use path.Dir to get the directory in which the file is located
-		folderPath := path.Dir(path.Join(event.Series.Path, event.File.RelativePath))
+		folderPath := path.Join(event.Series.Path, event.File.RelativePath)
 		paths = append(paths, folderPath)
 	}
 

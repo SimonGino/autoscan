@@ -143,8 +143,8 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            cloudb0x/autoscan:${{ steps.releasetag.outputs.tag }}
-            cloudb0x/autoscan:latest
+            simongino/autoscan:${{ steps.releasetag.outputs.tag }}
+            simongino/autoscan:latest
 
       # docker build (branch)
       - name: branch name
@@ -174,7 +174,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            cloudb0x/autoscan:${{ steps.dockertag.outputs.replaced }}
+            simongino/autoscan:${{ steps.dockertag.outputs.replaced }}
 
       # cleanup
       - name: cleanup
