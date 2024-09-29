@@ -67,11 +67,17 @@ func (t target) Scan(scan autoscan.Scan) error {
 	// determine library for this scan
 	scanFolder := t.rewrite(scan.Folder)
 
+	t.log.Debug().
+		Str("original_folder", scan.Folder).
+		Str("rewritten_folder", scanFolder).
+		Msg("Rewritten scan folder for Emby")
+
 	lib, err := t.getScanLibrary(scanFolder)
 	if err != nil {
 		t.log.Warn().
 			Err(err).
-			Msg("No target libraries found")
+			Str("folder", scanFolder).
+			Msg("No target libraries found for Emby")
 
 		return nil
 	}
@@ -82,13 +88,14 @@ func (t target) Scan(scan autoscan.Scan) error {
 		Logger()
 
 	// send scan request
-	l.Trace().Msg("Sending scan request")
+	l.Info().Msg("Sending scan request to Emby")
 
 	if err := t.api.Scan(scanFolder); err != nil {
+		l.Error().Err(err).Msg("Failed to send scan request to Emby")
 		return err
 	}
 
-	l.Info().Msg("Scan moved to target")
+	l.Info().Msg("Scan request successfully sent to Emby")
 	return nil
 }
 

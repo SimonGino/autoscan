@@ -79,6 +79,13 @@ func (h handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 
 	drive := chi.URLParam(r, "drive")
 
+	// 添加这些日志语句
+	rlog.Info().
+		Str("method", r.Method).
+		Str("url", r.URL.String()).
+		Str("drive", drive).
+		Msg("Received A-Train request")
+
 	event := new(atrainEvent)
 	err = json.NewDecoder(r.Body).Decode(event)
 	if err != nil {
@@ -87,21 +94,31 @@ func (h handler) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	rlog.Trace().Interface("event", event).Msg("Received JSON body")
+	rlog.Debug().Interface("event", event).Msg("Received JSON body")
 
 	scans := make([]autoscan.Scan, 0)
 
 	for _, path := range event.Created {
+		rewrittenPath := h.rewrite(drive, path)
+		rlog.Debug().
+			Str("original_path", path).
+			Str("rewritten_path", rewrittenPath).
+			Msg("Created scan")
 		scans = append(scans, autoscan.Scan{
-			Folder:   h.rewrite(drive, path),
+			Folder:   rewrittenPath,
 			Priority: h.priority,
 			Time:     now(),
 		})
 	}
 
 	for _, path := range event.Deleted {
+		rewrittenPath := h.rewrite(drive, path)
+		rlog.Debug().
+			Str("original_path", path).
+			Str("rewritten_path", rewrittenPath).
+			Msg("Deleted scan")
 		scans = append(scans, autoscan.Scan{
-			Folder:   h.rewrite(drive, path),
+			Folder:   rewrittenPath,
 			Priority: h.priority,
 			Time:     now(),
 		})

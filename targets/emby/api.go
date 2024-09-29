@@ -158,6 +158,11 @@ func (c apiClient) Scan(path string) error {
 
 	// create request
 	reqURL := autoscan.JoinURL(c.baseURL, "Library", "Media", "Updated")
+	c.log.Debug().
+		Str("url", reqURL).
+		Str("path", path).
+		Msg("Preparing Emby scan request")
+
 	req, err := http.NewRequest("POST", reqURL, bytes.NewBuffer(b))
 	if err != nil {
 		return fmt.Errorf("failed creating scan request: %v: %w", err, autoscan.ErrFatal)
@@ -166,11 +171,17 @@ func (c apiClient) Scan(path string) error {
 	req.Header.Set("Content-Type", "application/json")
 
 	// send request
+	c.log.Debug().Msg("Sending scan path request to Emby")
 	res, err := c.do(req)
 	if err != nil {
+		c.log.Error().Err(err).Msg("Failed to send scan request to Emby")
 		return fmt.Errorf("scan: %w", err)
 	}
 
 	defer res.Body.Close()
+	c.log.Info().
+		Str("status", res.Status).
+		Msg("Received response from Emby")
+
 	return nil
 }
