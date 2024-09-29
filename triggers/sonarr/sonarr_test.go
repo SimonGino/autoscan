@@ -54,7 +54,7 @@ func TestHandler(t *testing.T) {
 				StatusCode: 200,
 				Scans: []autoscan.Scan{
 					{
-						Folder:   "/mnt/unionfs/Media/TV/Westworld/Season 1/Westworld.S01E01.mkv",
+						Folder:   "/mnt/unionfs/Media/TV/Westworld/Season 1",
 						Priority: 5,
 						Time:     currentTime,
 					},
@@ -71,7 +71,7 @@ func TestHandler(t *testing.T) {
 				StatusCode: 200,
 				Scans: []autoscan.Scan{
 					{
-						Folder:   "/mnt/unionfs/Media/TV/Westworld/Season 2/Westworld.S02E01.mkv",
+						Folder:   "/mnt/unionfs/Media/TV/Westworld/Season 2",
 						Priority: 5,
 						Time:     currentTime,
 					},
